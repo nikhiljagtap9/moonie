@@ -28,44 +28,46 @@ function App() {
       ];
 
     const links = styles.map((href) => {
+      if (document.querySelector(`link[href="${href}"]`)) return null;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = href;
       document.head.appendChild(link);
       return link;
-  });
+    }).filter(Boolean);
 
 
   // JavaScript files (footer scripts)
-    // const scripts = isAuth
-    //   ? []
-    //   : [
-    //       '/assets/js/plugins/popper.min.js',
-    //       '/assets/js/plugins/simplebar.min.js',
-    //       '/assets/js/plugins/bootstrap.min.js',
-    //       '/assets/js/plugins/i18next.min.js',
-    //       '/assets/js/plugins/i18nextHttpBackend.min.js',
-    //       '/assets/js/icon/custom-font.js',
-    //        '/assets/js/script.js',
-    //       '/assets/js/theme.js',
-    //       '/assets/js/multi-lang.js',
-    //       '/assets/js/plugins/feather.min.js',
-    //     ];
+    const scripts = isAuth
+      ? []
+      : [
+          '/assets/js/plugins/popper.min.js',
+          '/assets/js/plugins/simplebar.min.js',
+          '/assets/js/plugins/bootstrap.min.js',
+          '/assets/js/plugins/i18next.min.js',
+          '/assets/js/plugins/i18nextHttpBackend.min.js',
+          '/assets/js/icon/custom-font.js',
+           '/assets/js/script.js',
+          '/assets/js/theme.js',
+          '/assets/js/multi-lang.js',
+          '/assets/js/plugins/feather.min.js',
+        ];
 
-    // const scriptTags = scripts.map((src) => {
-    //   const script = document.createElement('script');
-    //   script.src = src;
-    //   script.defer = true;
-    //   document.body.appendChild(script);
-    //   return script;
-    // });
+    const scriptTags = scripts.map((src) => {
+      if (document.querySelector(`script[src="${src}"]`)) return null;
+      const script = document.createElement('script');
+      script.src = src;
+      script.defer = true;
+      document.body.appendChild(script);
+      return script;
+    }).filter(Boolean);
 
   return () => {
     // Cleanup styles
     links.forEach(link => document.head.removeChild(link));
 
     // Cleanup scripts
-   // scriptTags.forEach(script => document.body.removeChild(script));
+    scriptTags.forEach(script => document.body.removeChild(script));
   };
 }, [isAuth]);
 

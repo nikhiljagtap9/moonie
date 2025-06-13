@@ -436,51 +436,54 @@ function removeClassByPrefix(node, prefix) {
     }
   }
 }
+if (typeof slideUp === 'undefined') {
+  var slideUp = (target, duration = 0) => {
+    target.style.transitionProperty = 'height, margin, padding';
+    target.style.transitionDuration = duration + 'ms';
+    target.style.boxSizing = 'border-box';
+    target.style.height = target.offsetHeight + 'px';
+    target.offsetHeight;
+    target.style.overflow = 'hidden';
+    target.style.height = 0;
+    target.style.paddingTop = 0;
+    target.style.paddingBottom = 0;
+    target.style.marginTop = 0;
+    target.style.marginBottom = 0;
+  };
+}
 
-let slideUp = (target, duration = 0) => {
-  target.style.transitionProperty = 'height, margin, padding';
-  target.style.transitionDuration = duration + 'ms';
-  target.style.boxSizing = 'border-box';
-  target.style.height = target.offsetHeight + 'px';
-  target.offsetHeight;
-  target.style.overflow = 'hidden';
-  target.style.height = 0;
-  target.style.paddingTop = 0;
-  target.style.paddingBottom = 0;
-  target.style.marginTop = 0;
-  target.style.marginBottom = 0;
-};
+if (typeof slideDown === 'undefined') {
+  var slideDown = (target, duration = 0) => {
+    target.style.removeProperty('display');
+    let display = window.getComputedStyle(target).display;
 
-let slideDown = (target, duration = 0) => {
-  target.style.removeProperty('display');
-  let display = window.getComputedStyle(target).display;
+    if (display === 'none') display = 'block';
 
-  if (display === 'none') display = 'block';
-
-  target.style.display = display;
-  let height = target.offsetHeight;
-  target.style.overflow = 'hidden';
-  target.style.height = 0;
-  target.style.paddingTop = 0;
-  target.style.paddingBottom = 0;
-  target.style.marginTop = 0;
-  target.style.marginBottom = 0;
-  target.offsetHeight;
-  target.style.boxSizing = 'border-box';
-  target.style.transitionProperty = 'height, margin, padding';
-  target.style.transitionDuration = duration + 'ms';
-  target.style.height = height + 'px';
-  target.style.removeProperty('padding-top');
-  target.style.removeProperty('padding-bottom');
-  target.style.removeProperty('margin-top');
-  target.style.removeProperty('margin-bottom');
-  window.setTimeout(() => {
-    target.style.removeProperty('height');
-    target.style.removeProperty('overflow');
-    target.style.removeProperty('transition-duration');
-    target.style.removeProperty('transition-property');
-  }, duration);
-};
+    target.style.display = display;
+    let height = target.offsetHeight;
+    target.style.overflow = 'hidden';
+    target.style.height = 0;
+    target.style.paddingTop = 0;
+    target.style.paddingBottom = 0;
+    target.style.marginTop = 0;
+    target.style.marginBottom = 0;
+    target.offsetHeight;
+    target.style.boxSizing = 'border-box';
+    target.style.transitionProperty = 'height, margin, padding';
+    target.style.transitionDuration = duration + 'ms';
+    target.style.height = height + 'px';
+    target.style.removeProperty('padding-top');
+    target.style.removeProperty('padding-bottom');
+    target.style.removeProperty('margin-top');
+    target.style.removeProperty('margin-bottom');
+    window.setTimeout(() => {
+      target.style.removeProperty('height');
+      target.style.removeProperty('overflow');
+      target.style.removeProperty('transition-duration');
+      target.style.removeProperty('transition-property');
+    }, duration);
+  };
+}
 
 var slideToggle = (target, duration = 0) => {
   if (window.getComputedStyle(target).display === 'none') {
@@ -494,17 +497,22 @@ var slideToggle = (target, duration = 0) => {
 // =======================================================
 
 
-const input = document.getElementById('imageUpload');
-const preview = document.getElementById('previewImage');
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('imageUpload');
+  const preview = document.getElementById('previewImage');
 
-input.addEventListener('change', function () {
-  const file = this.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.src = e.target.result; // Replace dummy image
-    }
-    reader.readAsDataURL(file);
+  if (input && preview) {
+
+    input.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result; // Replace dummy image
+        }
+        reader.readAsDataURL(file);
+      }
+    });
   }
 });
 
