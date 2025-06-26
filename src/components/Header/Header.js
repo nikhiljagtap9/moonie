@@ -8,9 +8,9 @@ import Sidebar from './Sidebar';
 const Header = () => {
   return (
     <>
-      <div class="loader-bg">
-         <div class="loader-track">
-            <div class="loader-fill"></div>
+      <div className="loader-bg">
+         <div className="loader-track">
+            <div className="loader-fill"></div>
          </div>
       </div>
       <Sidebar />

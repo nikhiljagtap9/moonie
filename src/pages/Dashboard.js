@@ -1,5 +1,6 @@
 import {useEffect} from 'react';
 const Dashboard = () => {
+    
 useEffect(() => {
   document.body.style.background = "#fff";
 },[]);

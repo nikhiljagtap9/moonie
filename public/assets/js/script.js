@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Check if overlay already exists before adding
         if (!document.querySelector('.pc-menu-overlay')) {
-          pcSidebar.insertAdjacentHTML('beforeend', '<div class="pc-menu-overlay"></div>');
+          pcSidebar.insertAdjacentHTML('beforeend', '<div className="pc-menu-overlay"></div>');
 
           // Add event listener to the overlay for removing menu and overlay on click
           document.querySelector('.pc-menu-overlay').addEventListener('click', function () {
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           // Only add the overlay if it doesn't already exist
           if (!document.querySelector('.pc-menu-overlay')) {
-            temp_sidebar.insertAdjacentHTML('beforeend', '<div class="pc-menu-overlay"></div>');
+            temp_sidebar.insertAdjacentHTML('beforeend', '<div className="pc-menu-overlay"></div>');
 
             // Add event listener to remove the menu when overlay is clicked
             document.querySelector('.pc-menu-overlay').addEventListener('click', function () {
@@ -381,14 +381,14 @@ likeInputs.forEach(function (likeInput) {
       // Append like animation HTML
       parentElement.insertAdjacentHTML(
         'beforeend',
-        `<div class="pc-like">
-          <div class="like-wrapper">
+        `<div className="pc-like">
+          <div className="like-wrapper">
             <span>
-              <span class="pc-group">
-                <span class="pc-dots"></span>
-                <span class="pc-dots"></span>
-                <span class="pc-dots"></span>
-                <span class="pc-dots"></span>
+              <span className="pc-group">
+                <span className="pc-dots"></span>
+                <span className="pc-dots"></span>
+                <span className="pc-dots"></span>
+                <span className="pc-dots"></span>
               </span>
             </span>
           </div>

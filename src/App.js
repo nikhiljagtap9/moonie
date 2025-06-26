@@ -3,83 +3,45 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import Home from './pages/Home';
 
+import Welcome from './pages/Welcome';
+import CreateApp from './pages/CreateApp';
+import Listing from './pages/Listing';
 import Dashboard from './pages/Dashboard';
+import PaymentLink from './pages/PaymentLink';
+import Transactions from './pages/Payments/Transactions';
+import Methods from './pages/Payments/Methods';
+import ConnectMethod from './pages/Payments/ConnectMethod';
+import PayoutTransactions from './pages/Payouts/PayoutTransactions';
+import PayoutMethods from './pages/Payouts/PayoutMethods';
+import PayoutConnectMethod from './pages/Payouts/PayoutConnectMethod';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
 function App() {
-  const location = useLocation();
-  const isAuth = location.pathname.startsWith('/auth');
-  useEffect(() => {
-  // Define all stylesheets for main and auth layout
-  const styles = isAuth
-    ? ['/assets/css/auth.css']
-    : [
-        'https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap',
-        '/assets/fonts/phosphor/duotone/style.css',
-        '/assets/fonts/tabler-icons.min.css',
-        '/assets/fonts/feather.css',
-        '/assets/fonts/fontawesome.css',
-        '/assets/fonts/material.css',
-        '/assets/css/style.css',
-        '/assets/css/style-preset.css',
-        '/assets/css/plugins/dataTables.bootstrap5.min.css',
-      ];
-
-    const links = styles.map((href) => {
-      if (document.querySelector(`link[href="${href}"]`)) return null;
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      document.head.appendChild(link);
-      return link;
-    }).filter(Boolean);
-
-
-  // JavaScript files (footer scripts)
-    const scripts = isAuth
-      ? []
-      : [
-          '/assets/js/plugins/popper.min.js',
-          '/assets/js/plugins/simplebar.min.js',
-          '/assets/js/plugins/bootstrap.min.js',
-          '/assets/js/plugins/i18next.min.js',
-          '/assets/js/plugins/i18nextHttpBackend.min.js',
-          '/assets/js/icon/custom-font.js',
-           '/assets/js/script.js',
-          '/assets/js/theme.js',
-          '/assets/js/multi-lang.js',
-          '/assets/js/plugins/feather.min.js',
-        ];
-
-    const scriptTags = scripts.map((src) => {
-      if (document.querySelector(`script[src="${src}"]`)) return null;
-      const script = document.createElement('script');
-      script.src = src;
-      script.defer = true;
-      document.body.appendChild(script);
-      return script;
-    }).filter(Boolean);
-
-  return () => {
-    // Cleanup styles
-    links.forEach(link => document.head.removeChild(link));
-
-    // Cleanup scripts
-    scriptTags.forEach(script => document.body.removeChild(script));
-  };
-}, [isAuth]);
 
   return (
 
       <Routes>
         {/* Auth Routes */}
+        <Route path="/" element={<AuthLayout><Home /></AuthLayout>} />
         <Route path="/login" element={<AuthLayout><Login /></AuthLayout>} />
         <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
 
         {/* Main Routes */}
+        <Route path="/welcome" element={<MainLayout><Welcome /></MainLayout>} />
+        <Route path="/create-app" element={<MainLayout><CreateApp /></MainLayout>} />
+        <Route path="/listing" element={<MainLayout><Listing /></MainLayout>} />
+
         <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
+        <Route path="/paymentLink" element={<MainLayout><PaymentLink /></MainLayout>} />
+        <Route path="/transactions" element={<MainLayout><Transactions /></MainLayout>} />
+        <Route path="/methods" element={<MainLayout><Methods /></MainLayout>} />
+        <Route path="/connect-method" element={<MainLayout><ConnectMethod /></MainLayout>} />
+        <Route path="/payout-transactions" element={<MainLayout><PayoutTransactions /></MainLayout>} />
+        <Route path="/payout-methods" element={<MainLayout><PayoutMethods /></MainLayout>} />
+        <Route path="/payout-connect-method" element={<MainLayout><PayoutConnectMethod /></MainLayout>} />
       </Routes>
   );
 }
