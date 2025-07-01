@@ -76,37 +76,17 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
   (formData, navigate) =>
   async (dispatch) => {
     try {
-        dispatch(setIsLoading(true))
+      dispatch(setIsLoading(true))
       localStorage.removeItem("profile");
       sessionStorage.removeItem("profile");
       const response = await Api.signUp(formData);
       const { error,data } = response;
       if (error) {
-        // dispatch({
-        //   type: types.SIGNUP_FAIL,
-        //   payload: error,
-        // });
         toast.error(response?.error)
         dispatch(setIsLoading(false))
       } else {
-       
-        toast.success(data?.metas?.message)
+        toast.success(response?.data?.message)
         dispatch(setIsLoading(false))
-        // if (!isConsentGiven) {
-        //   dispatch({
-        //     type: types.SIGNUP_SUCCESS,
-        //     payload: types.SIGNUP_SUCCESS_MESSAGE,
-        //   });
-        //   navigate("/signin");
-        // }
-
-        // if (isConsentGiven) {
-        //   dispatch({
-        //     type: types.SIGNUP_SUCCESS,
-        //     payload: types.SIGNUP_SUCCESS_MESSAGE,
-        //   });
-        //   navigate("/auth/verify", { state: email });
-        // }
         navigate("/login")
       }
     } catch (error) {

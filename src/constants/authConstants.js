@@ -2,7 +2,7 @@ export const LOGOUT = "LOGOUT";
 
 export const APICONSTANTS = {
     loginpath: ({ PhoneNumber, Password }) => `/Users/Login?PhoneNumber=${PhoneNumber}&Password=${Password}`,
-    sigupPath: '/Users/Register',
+    sigupPath: 'auth/register',
     forgotPassPath: ({ PhoneNumber }) => `/forgetPassword?PhoneNumber=${PhoneNumber}`,
     ResendOtpPath: ({ PhoneNumber }) => `/ResendPhoneVerification?phone=${PhoneNumber}`,
     verifyOtp: ({ PhoneNumber, Vcode }) => `/Users/Verify?PhoneNumber=${PhoneNumber}&Vcode=${Vcode}`,

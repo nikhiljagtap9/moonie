@@ -4,6 +4,7 @@ import { signUpAction } from "../actions/authAction";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signUpSchema } from "../validationSchema/validationSchema";
+import LocalError from "../components/Error/validationError";
 
 function Registration() {
   const [showPass, setShowPass] = useState(false);
@@ -13,16 +14,8 @@ function Registration() {
 
   const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
     try {
-      console.log("Form values inside handleSubmitForm:", values); // Debugging the form values
-      debugger;
       // Dispatch the action to handle the signup API call
       await dispatch(signUpAction(values, navigate));
-
-      // Reset the form fields after successful submission
-      resetForm();
-
-      // Optionally, navigate to another page (e.g., dashboard, login)
-      navigate("/dashboard"); // Replace "/dashboard" with the desired route
     } catch (error) {
       console.error("Error during form submission:", error);
       alert("There was an error submitting the form. Please try again.");
@@ -61,11 +54,11 @@ function Registration() {
                     <div className="tab-pane active">
                       <Formik
                         initialValues={{
-                          FirstName: "",
-                          LastName: "",
-                          Email: "",
-                          Password: "",
-                          CPassword: ""
+                          first_name: "",
+                          last_name: "",
+                          email: "",
+                          password: "",
+                          password_confirmation: ""
                         }}
                         validationSchema={signUpSchema}
                         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -90,65 +83,64 @@ function Registration() {
 
                             <div className="form-group half_inp1">
                               <input
-                                required
                                 className="form-control"
                                 placeholder="First Name"
                                 type="text"
-                                id="firstname"
-                                name="FirstName"
-                                value={values.FirstName}
+                                id="first_name"
+                                name="first_name"
+                                value={values.first_name}
                                 onChange={handleChange}
                               />
+                               <LocalError touched={touched.first_name} error={errors.first_name} />
                             </div>
                             <div className="form-group half_inp2">
                               <input
-                                required
                                 className="form-control"
                                 placeholder="Last Name"
-                                id="lastname"
+                                id="last_name"
                                 type="text"
-                                name="LastName"
-                                value={values.LastName}
+                                name="last_name"
+                                value={values.last_name}
                                 onChange={handleChange}
                               />
+                               <LocalError touched={touched.last_name} error={errors.last_name} />
                             </div>
 
                             <div className="form-group">
                               <input
-                                required
                                 className="form-control"
                                 placeholder="Email ID"
                                 id="email"
-                                type="email"
-                                name="Email"
-                                value={values.Email}
+                                name="email"
+                                value={values.email}
                                 onChange={handleChange}
                               />
+                               <LocalError touched={touched.email} error={errors.email} />
                             </div>
 
                             <div className="form-group half_inp1">
                               <input
-                                required
                                 className="form-control"
                                 placeholder="Enter Password"
                                 id="password"
-                                name="Password"
+                                name="password"
                                 type="password"
-                                value={values.Password}
+                                value={values.password}
                                 onChange={handleChange}
                               />
+                               <LocalError touched={touched.password} error={errors.password} />
                             </div>
                             <div className="form-group half_inp2">
                               <input
-                                required
                                 className="form-control"
                                 placeholder="Re-enter Password"
-                                id="cpassword"
-                                name="CPassword"
+                                id="password_confirmation"
+                                name="password_confirmation"
                                 type="password"
-                                value={values.CPassword}
+                                value={values.password_confirmation}
                                 onChange={handleChange}
                               />
+                               <LocalError touched={touched.password_confirmation} error={errors.password_confirmation} />
                             </div>
 
                             <div className="text-center bottom">

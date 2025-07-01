@@ -15,12 +15,12 @@ export const loginSchema = Yup.object().shape({
 
 
 export const signUpSchema = Yup.object().shape({
-  FirstName: Yup.string().required("First Name is required"),
-  LastName: Yup.string().required("Last Name is required"),
-  Email: Yup.string().email("Invalid email").required("Email is required"),
-  Password: Yup.string().min(6, "Password is too short").required("Password is required"),
-  CPassword: Yup.string()
-    .oneOf([Yup.ref('Password'), null], "Passwords must match")
+  first_name: Yup.string().required("First Name is required"),
+  last_name: Yup.string().required("Last Name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(6, "Password is too short").required("Password is required"),
+  password_confirmation: Yup.string()
+    .oneOf([Yup.ref('password'), null], "Passwords must match")
     .required("Confirm Password is required"),
 });
 
