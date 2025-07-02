@@ -5,7 +5,7 @@ import { handleApiError } from "./utils";
 
 export const signIn = async (formData) => {
     try {
-      const res = await commonInterceptor.get(APICONSTANTS.loginpath(formData), {
+      const res = await commonInterceptor.post(APICONSTANTS.loginpath,formData, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -28,3 +28,31 @@ export const signUp = async (formData) => {
       return handleApiError(error);
     }
   };
+export const createApplication = async (formData) => {
+  try{
+     const res =  await authInterceptor.post(APICONSTANTS.createApplication,formData,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+export const getApplications = async () => {
+  try{
+     const res =  await authInterceptor.get(APICONSTANTS.getApplications,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+
+  

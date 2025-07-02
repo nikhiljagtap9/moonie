@@ -32242,4 +32242,82 @@ table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1)>* {
     border-radius: 15px;
     font-weight: 500;
 }
+
+/*_________________________________________CSS_2_JULY_NIKHIL____________________________________*/
+
+
+
+  .kyc_panl .tabs {
+      max-width: 100%;
+      margin: auto;
+    }
+
+    .kyc_panl .tab-buttons {
+      display: flex;
+     
+    }
+
+    .kyc_panl .tab-buttons button {
+      flex: 1;
+      padding: 12px;
+      cursor: pointer;
+      background-color: #f1f1f1;
+      border: none;
+      border-bottom: 2px solid transparent;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .kyc_panl .tab-buttons button.active {
+    background-color: #fff;
+    border-bottom: 3px solid #8b288f;
+    font-weight: bold;
+    color:#8b288f;
+  }
+
+    .kyc_panl .tab-content {
+      
+      border-top: none;
+      display: block;
+    }
+
+    .kyc_panl .tab-content.active {
+      display: block;
+    }
+
+    .kyc_panl .tab-buttons{
+      float: left;
+      width: 90%;
+      margin-left: 5%;
+    }
+
+    .kyc_panl .tab-buttons button{
+      font-size: 20px;
+      text-transform: uppercase;
+    }
+
+    .comn_md_4 .col-md-4{
+      float: left;
+      width: 31.3333333%;
+      margin:6px 1%;
+    }
+
+    .comn_md_4 .col-md-3{
+      float: left;
+      width: 23%;
+      margin:6px 1%;
+    }
+
+
+    .kyc_panl .submi_movi{
+      float: right;
+      width: auto;
+      padding: 10px 20px;
+    }
+
+
+    .comn_md_4 .col-md-12{
+      float: left;
+      width: 48%;
+      margin: 10px 1%;
+    }
  

@@ -1,8 +1,11 @@
 export const LOGOUT = "LOGOUT";
 
 export const APICONSTANTS = {
-    loginpath: ({ PhoneNumber, Password }) => `/Users/Login?PhoneNumber=${PhoneNumber}&Password=${Password}`,
+    loginpath: 'auth/login',
     sigupPath: 'auth/register',
+    applicationCategories: 'resources/application-categories',
+    createApplication: 'applications/create',
+    getApplications: 'applications',
     forgotPassPath: ({ PhoneNumber }) => `/forgetPassword?PhoneNumber=${PhoneNumber}`,
     ResendOtpPath: ({ PhoneNumber }) => `/ResendPhoneVerification?phone=${PhoneNumber}`,
     verifyOtp: ({ PhoneNumber, Vcode }) => `/Users/Verify?PhoneNumber=${PhoneNumber}&Vcode=${Vcode}`,
@@ -14,5 +17,6 @@ export const ROUTESCONSTANTS = {
     LOGOUT: "/logout",
     REGISTER: "/registration",
     FORGOT_PASSWORD: "/forget-password",
-    NEW_PASSWORD: "/new-password"
+    NEW_PASSWORD: "/new-password",
+    UPDATE_KYC: "/update-kyc"
 }

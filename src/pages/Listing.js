@@ -1,4 +1,41 @@
+import React, {useState,useEffect} from 'react';
+import { useDispatch } from "react-redux";
+import { getApplicationsAction } from "../actions/authAction";
+
+
 const Listing = () => {
+    const dispatch = useDispatch();
+    const[userName,setUserName] = useState('');
+    const [applicationList, setApplicationList] = useState([]);
+    
+    useEffect(() => {
+        const profileString = sessionStorage.getItem('profile') || localStorage.getItem('profile');
+        
+        if(profileString){
+            try{
+            const profile = JSON.parse(profileString);
+            const firstName = profile?.user?.first_name || '';
+                setUserName(firstName);
+            }catch(err){
+            console.error("Invalid session profile data", err);
+            }
+
+        }
+
+       
+        // call get application API
+        fetchApplicationList();
+        
+    },[]);
+
+    const fetchApplicationList = async () => {
+        let apps  = await dispatch(getApplicationsAction());
+        if (apps) {
+            setApplicationList(apps);
+        }
+    }
+
+  
     return (
         <>
             <style>{`
@@ -14,7 +51,7 @@ const Listing = () => {
                     <span className="wave">👋</span>
                 </div>
                 <div className="clear"></div>
-                <div className="app_titl">Hi Akash,<div className="clear"></div>
+                <div className="app_titl">Hi {userName},<div className="clear"></div>
                     <div className="welcmaka"> Welcome back to Moonie</div>
                     <div className="clear"></div>
                     <div className="dashb_text">
@@ -25,7 +62,14 @@ const Listing = () => {
                 <div className="hand_wrp">
 
                     <div className="listing_wrp_1">
-                        <a href="dashboard" className="listing_wrp_singl">
+                        {applicationList.map((app) => (
+                        <a key={app.id} href="dashboard" className="listing_wrp_singl">
+                            <img src={app.logo || "https://persausive.com/public/frontend/images/logo_fev.png"} className="lisgn_icon" alt="App" />
+                            <div className="listn_text">{app.name}</div>
+                            <div className="clear"></div>
+                        </a>
+                        ))}
+                        {/* <a href="dashboard" className="listing_wrp_singl">
                             <img src="https://persausive.com/public/frontend/images/logo_fev.png" className="lisgn_icon" />
                             <div className="listn_text">Persausive</div>
                             <div className="clear"></div>
@@ -35,7 +79,7 @@ const Listing = () => {
                             <img src="https://persausive.com/public/frontend/images/logo_fev.png" className="lisgn_icon" />
                             <div className="listn_text">Persausive</div>
                             <div className="clear"></div>
-                        </a>
+                        </a> */}
 
                         <a href="create-app" className="listing_wrp_singl add_new_list">
                             <div className="lisgn_icon lisgn_icon_add">

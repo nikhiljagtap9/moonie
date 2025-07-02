@@ -6,11 +6,8 @@ import * as Yup from "yup";
 const phoneRegExp = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
 export const loginSchema = Yup.object().shape({
-  PhoneNumber: Yup.string()
-    .min(9, "too short")
-    .matches(phoneRegExp, 'Phone number is not valid')
-    .required("Enter Valid Phone Number"),
-  Password: Yup.string().required("Enter Your Password Here")
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().required("Enter Your Password Here")
 });
 
 
@@ -55,3 +52,32 @@ export const updatePasswordSchema = Yup.object().shape({
     .oneOf([Yup.ref('NewPassword'), null], 'Passwords must match')
 
 })
+
+export const applicationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Name is required")
+    .max(255, "Name must not exceed 255 characters"),
+
+  category_id: Yup.string()
+    .required("Category is required"),
+
+  description: Yup.string()
+    .required("Description is required")
+    .max(500, "Description must not exceed 500 characters"),
+
+  website: Yup.string()
+    .required("Website URL is required")
+    .url("Enter a valid URL")
+    .max(255, "Website URL must not exceed 255 characters"),
+
+  logo: Yup.mixed()
+    .test("fileType", "Only JPG, PNG, JPEG, WEBP files are allowed", (value) => {
+      if (!value) return true; // optional
+      const supportedFormats = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
+      return supportedFormats.includes(value.type);
+    })
+    .test("fileSize", "Logo must be less than 10MB", (value) => {
+      if (!value) return true; // optional
+      return value.size <= 10 * 1024 * 1024; // 10MB
+    }),
+});

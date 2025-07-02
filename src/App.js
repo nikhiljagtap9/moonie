@@ -16,7 +16,10 @@ import ConnectMethod from './pages/Payments/ConnectMethod';
 import PayoutTransactions from './pages/Payouts/PayoutTransactions';
 import PayoutMethods from './pages/Payouts/PayoutMethods';
 import PayoutConnectMethod from './pages/Payouts/PayoutConnectMethod';
+import UpdateKYC from './pages/UpdateKYC';
+import Profile from './pages/Profile';
 import Login from './pages/Login';
+import Logout from './pages/Logout';
 import Register from './pages/Register';
 
 function App() {
@@ -27,9 +30,13 @@ function App() {
         {/* Auth Routes */}
         <Route path="/" element={<AuthLayout><Home /></AuthLayout>} />
         <Route path="/login" element={<AuthLayout><Login /></AuthLayout>} />
+        
         <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
 
         {/* Main Routes */}
+        <Route exact path="/logout" element={<Logout/>} />
+        <Route path="/update-kyc" element={<MainLayout><UpdateKYC /></MainLayout>} />
+        <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
         <Route path="/welcome" element={<MainLayout><Welcome /></MainLayout>} />
         <Route path="/create-app" element={<MainLayout><CreateApp /></MainLayout>} />
         <Route path="/listing" element={<MainLayout><Listing /></MainLayout>} />

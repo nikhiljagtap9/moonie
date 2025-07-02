@@ -4,7 +4,7 @@
     // console.info(`[request] [${JSON.stringify(config)}]`);
     const token = localStorage.getItem("profile")||sessionStorage.getItem("profile");
     const access_token = JSON.parse(token)?.accessToken;
-   
+    console.log("access_token " + access_token);
     if (access_token) {
       config.headers["Authorization"] = "Bearer "+access_token;
     } else {
