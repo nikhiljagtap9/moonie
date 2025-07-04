@@ -15,4 +15,17 @@ export const getCategories = async () => {
   }
 }
 
+export const getCountries = async () => {
+  try{
+     const res =  await commonInterceptor.get(APICONSTANTS.getCountries,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
   

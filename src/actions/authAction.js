@@ -159,3 +159,68 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
       return null;
     }
   };
+
+   export const updateUserProfileAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.updateUserProfile(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return;
+      }
+
+      toast.success(data?.message);
+      dispatch(setIsLoading(false));
+    //  navigate("/listing");
+
+    } catch (err) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while creating the application.");
+    }
+  };
+
+    export const forgotPasswordAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.sendPasswordResetLink(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return;
+      }
+
+      toast.success(data?.message);
+      dispatch(setIsLoading(false));
+    //  navigate("/listing");
+
+    } catch (err) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while creating the application.");
+    }
+  };
+
+  export const resetPasswordAction = (formData, navigate) => async (dispatch) => {
+    try { 
+      const response = await Api.resetPassword(formData);
+      const { data, error } = response;
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return;
+      }
+
+      toast.success(data?.message);
+      dispatch(setIsLoading(false));
+      navigate("/login"); // Redirect to login after reset
+    } catch (error) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while creating the application.");
+    }
+  };

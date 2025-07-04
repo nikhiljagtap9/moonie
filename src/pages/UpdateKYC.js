@@ -8,7 +8,6 @@ const UpdateKYC = () => {
   const [activeTab, setActiveTab] = useState("basic");
 
   const renderTab = () => {
-    console.log("Active Tab:", activeTab);
     switch (activeTab) {
       case "basic": return <BasicProfile />;
       case "personal": return <PersonalKYC />;

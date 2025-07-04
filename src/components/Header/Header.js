@@ -228,7 +228,7 @@ const Header = () => {
                         <span>Change password</span>
                         </span>
                       </a> */}
-                      <a href={ROUTESCONSTANTS?.PROFILE } class="dropdown-item">
+                       <a href={ROUTESCONSTANTS?.PROFILE} class="dropdown-item">
                         <span class="d-flex align-items-center">
                         <i class="ph-duotone ph-user-circle"></i>
                         <span>Edit profile</span>

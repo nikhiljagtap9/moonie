@@ -5,6 +5,9 @@
 import * as Yup from "yup";
 const phoneRegExp = /^(\+?[1-9]{1,4})?[-.\s]?(\(?\d{1,4}\)?)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
+// Password regex: 8+ characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
+const passwordRules = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,}$/;
+
 export const loginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().required("Enter Your Password Here")
@@ -15,7 +18,12 @@ export const signUpSchema = Yup.object().shape({
   first_name: Yup.string().required("First Name is required"),
   last_name: Yup.string().required("Last Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(6, "Password is too short").required("Password is required"),
+  password: Yup.string()
+    .matches(
+      passwordRules,
+      "Must be at least 8 characters and include uppercase, lowercase, number, and symbol."
+    )
+    .required("Password is required"),
   password_confirmation: Yup.string()
     .oneOf([Yup.ref('password'), null], "Passwords must match")
     .required("Confirm Password is required"),
@@ -80,4 +88,53 @@ export const applicationSchema = Yup.object().shape({
       if (!value) return true; // optional
       return value.size <= 10 * 1024 * 1024; // 10MB
     }),
+});
+
+export const updateUserProfileSchema = Yup.object().shape({
+  first_name: Yup.string()
+    .max(255, "First name must not exceed 255 characters")
+    .required("First name is required"),
+
+  last_name: Yup.string()
+    .max(255, "Last name must not exceed 255 characters")
+    .required("Last name is required"),
+
+  phone: Yup.string()
+    .matches(/^\+\d{6,15}$/, "Phone number must be in international format (e.g. +237652123456)")
+    .required("Phone number is required"),
+
+  dob: Yup.date()
+    .max(new Date(), "Date of birth must be before today")
+    .typeError("Invalid date format. Use YYYY-MM-DD")
+    .required("Date of birth is required"),
+
+  country_id: Yup.string()
+    .required("Country is required"),
+
+  state: Yup.string()
+    .max(255, "State must not exceed 255 characters")
+    .required("State is required"),
+
+  city: Yup.string()
+    .max(255, "City must not exceed 255 characters")
+    .required("City is required"),
+
+  address: Yup.string()
+    .required("Address is required"),
+});
+
+export const forgotPasswordSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+});
+
+export const resetPasswordSchema = Yup.object().shape({
+  password: Yup.string()
+    .matches(
+      passwordRules,
+      "Must be at least 8 characters and include uppercase, lowercase, number, and symbol."
+    )
+    .required("Password is required"),
+    password_confirmation: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm Password is required"),
 });

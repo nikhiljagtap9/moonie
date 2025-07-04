@@ -54,5 +54,47 @@ export const getApplications = async () => {
   }
 }
 
+export const updateUserProfile = async (formData) => {
+  try{
+     const res =  await authInterceptor.patch(APICONSTANTS.updateUserProfile,formData,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+export const sendPasswordResetLink = async (formData) => {
+  try{
+     const res =  await authInterceptor.post(APICONSTANTS.sendPasswordResetLink,formData,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+export const resetPassword = async (formData) => {
+  try{
+     const res =  await commonInterceptor.post(APICONSTANTS.resetPassword,formData,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+
+
+
 
   

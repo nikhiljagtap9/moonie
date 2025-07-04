@@ -6,11 +6,10 @@ export const APICONSTANTS = {
     applicationCategories: 'resources/application-categories',
     createApplication: 'applications/create',
     getApplications: 'applications',
-    forgotPassPath: ({ PhoneNumber }) => `/forgetPassword?PhoneNumber=${PhoneNumber}`,
-    ResendOtpPath: ({ PhoneNumber }) => `/ResendPhoneVerification?phone=${PhoneNumber}`,
-    verifyOtp: ({ PhoneNumber, Vcode }) => `/Users/Verify?PhoneNumber=${PhoneNumber}&Vcode=${Vcode}`,
-    verifyEmail: ({ Vcode }) => `/VerifyEmail?vcode=${Vcode}`,
-    updatePasswordPath: "verifyOtpAndResetPassword"
+    updateUserProfile: 'user/update',
+    getCountries: 'resources/countries',
+    sendPasswordResetLink: 'auth/password/forgot',
+    resetPassword: "auth/password/reset",
 }
 export const ROUTESCONSTANTS = {
     LOGIN: "/login",
@@ -18,5 +17,7 @@ export const ROUTESCONSTANTS = {
     REGISTER: "/registration",
     FORGOT_PASSWORD: "/forget-password",
     NEW_PASSWORD: "/new-password",
-    UPDATE_KYC: "/update-kyc"
+    UPDATE_KYC: "/update-kyc",
+    PROFILE: "/profile",
+    RESET_PASSWORD: "reset-password",
 }

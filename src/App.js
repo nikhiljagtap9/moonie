@@ -21,6 +21,7 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
 
@@ -29,12 +30,12 @@ function App() {
       <Routes>
         {/* Auth Routes */}
         <Route path="/" element={<AuthLayout><Home /></AuthLayout>} />
-        <Route path="/login" element={<AuthLayout><Login /></AuthLayout>} />
-        
+        <Route path="/login" element={<AuthLayout><Login /></AuthLayout>} />    
         <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
+        <Route exact path="/logout" element={<Logout/>} />
+        <Route exact path="/reset-password" element={<ResetPassword/>} />
 
         {/* Main Routes */}
-        <Route exact path="/logout" element={<Logout/>} />
         <Route path="/update-kyc" element={<MainLayout><UpdateKYC /></MainLayout>} />
         <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
         <Route path="/welcome" element={<MainLayout><Welcome /></MainLayout>} />
