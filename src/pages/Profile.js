@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Formik } from "formik";
-import { forgotPasswordAction } from "../actions/authAction";
+import { forgotPasswordAction,sendVerificationEmailAction } from "../actions/authAction";
 import { forgotPasswordSchema } from "../validationSchema/validationSchema";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,20 +17,32 @@ const Profile = () => {
   const [kycTier, setKycTier] = useState('');
   const [twoFactorEnabled, setTwoFactorEnabled] = useState('');
   const [emailVerifiedAt, setEmailVerifiedAt] = useState('');
-  const [tier2VerifiedAt, setTier2VerifiedAt] = useState('');
-  const [tier3VerifiedAt, setTier3VerifiedAt] = useState('');
+  // const [tier2VerifiedAt, setTier2VerifiedAt] = useState('');
+  // const [tier3VerifiedAt, setTier3VerifiedAt] = useState('');
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
       try {
-        console.log("Form values inside handleSubmitForm:", values); // Debugging the form values
         // Dispatch the action to handle the signup API call
         await dispatch(forgotPasswordAction(values, navigate));
   
         // Reset the form fields after successful submission
         resetForm();
+      } catch (error) {
+        console.error("Error during form submission:", error);
+        alert("There was an error submitting the form. Please try again.");
+      } finally {
+        setSubmitting(false); // Stop loading state
+      }
+  };
+
+  const handleSubmitSendVerificationEmail = async (values, { setSubmitting, resetForm }) => {
+      try {
+        // Dispatch the action to handle the signup API call
+        await dispatch(sendVerificationEmailAction(values, navigate));
+
       } catch (error) {
         console.error("Error during form submission:", error);
         alert("There was an error submitting the form. Please try again.");
@@ -51,16 +63,16 @@ const Profile = () => {
         const kyc_tier = profile?.user?.kyc_tier || '';
         const two_factor_enabled = profile?.user?.two_factor_enabled || '';
         const email_verified_at = profile?.user?.email_verified_at || '';
-        const tier_2_verified_at = profile?.user?.tier_2_verified_at || '';
-        const tier_3_verified_at = profile?.user?.tier_3_verified_at || '';
+        // const tier_2_verified_at = profile?.user?.tier_2_verified_at || '';
+        // const tier_3_verified_at = profile?.user?.tier_3_verified_at || '';
         setFirstName(first_name);
         setLastName(last_name);
         setEmail(mail);
         setKycTier(kyc_tier);
         setTwoFactorEnabled(two_factor_enabled);
         setEmailVerifiedAt(email_verified_at);
-        setTier2VerifiedAt(tier_2_verified_at);
-        setTier3VerifiedAt(tier_3_verified_at);
+        // setTier2VerifiedAt(tier_2_verified_at);
+        // setTier3VerifiedAt(tier_3_verified_at);
       }catch{
 
       }
@@ -88,6 +100,7 @@ const Profile = () => {
               <div className="nav flex-column nav-pills list-group list-group-flush account-pills mb-0">
                 <button className={`nav-link list-group-item list-group-item-action ${activeTab === "overview" ? "active" : ""}`} onClick={() => setActiveTab("overview")}>Profile Overview</button>
                 <button className={`nav-link list-group-item list-group-item-action ${activeTab === "info" ? "active" : ""}`} onClick={() => setActiveTab("info")}>Forgot Password</button>
+                <button className={`nav-link list-group-item list-group-item-action ${activeTab === "verifyEmail" ? "active" : ""}`} onClick={() => setActiveTab("verifyEmail")}>Verify Email</button>
                 <button className={`nav-link list-group-item list-group-item-action ${activeTab === "password" ? "active" : ""}`} onClick={() => setActiveTab("password")}>Change Password</button>
                 <button className={`nav-link list-group-item list-group-item-action ${activeTab === "2fa" ? "active" : ""}`} onClick={() => setActiveTab("2fa")}>Two Factor Authentication</button>
               </div>
@@ -134,16 +147,16 @@ const Profile = () => {
                             <p className="mb-1 text-muted">Email Verified</p>
                             <p className="mb-0">{emailVerifiedAt ? 'Yes' : 'No'}</p>
                           </div>
-                          <div className="col-md-6">
+                          {/* <div className="col-md-6">
                             <p className="mb-1 text-muted">Tier 2 Verified</p>
                             <p className="mb-0">{tier2VerifiedAt ? 'Yes' : 'No'}</p>
-                          </div>
+                          </div> */}
                         </div>
                       </li>
-                      <li className="list-group-item px-0 pb-0">
+                      {/* <li className="list-group-item px-0 pb-0">
                         <p className="mb-1 text-muted">Tier 3 Verified</p>
                         <p className="mb-0">{tier3VerifiedAt ? 'Yes' : 'No'}</p>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </div>
@@ -188,6 +201,49 @@ const Profile = () => {
                   </div>
                   <div className="text-end btn-page">
                     <button type="submit" className="btn btn-primary">Send Reset Link</button>
+                  </div>
+                </form>
+                 )}
+                </Formik>
+              )}
+
+              {activeTab == 'verifyEmail' && (
+                <Formik
+                            initialValues={{
+                                email: "",
+                            }}
+                            onSubmit={async (values, { setSubmitting, resetForm }) => {
+                                console.log("Form values from Formik onSubmit:", values); // Log the values here
+                                setSubmitting(true);
+                                await handleSubmitSendVerificationEmail(values, { setSubmitting, resetForm });
+                                setSubmitting(false);
+                            }}
+                        >
+                          {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleSubmit,
+            })=> (
+                <form onSubmit={handleSubmit}>       
+                  <div className="card">
+                    <div className="card-header">
+                      <h5>Verify Email</h5>
+                    </div>
+                    <div className="card-body">
+                      <div className="row">
+                        <div className="col-sm-6">
+                          <div className="mb-3">
+                            <label className="form-label">Email <span className="text-danger">*</span></label>
+                            <input type="email" readOnly name="email" className="form-control" value={email} onChange={handleChange}/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-end btn-page">
+                    <button type="submit" className="btn btn-primary">Send Verification Email</button>
                   </div>
                 </form>
                  )}

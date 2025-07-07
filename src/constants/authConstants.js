@@ -10,6 +10,9 @@ export const APICONSTANTS = {
     getCountries: 'resources/countries',
     sendPasswordResetLink: 'auth/password/forgot',
     resetPassword: "auth/password/reset",
+    sendVerificationEmail: 'auth/email/verification-notification',
+    verifyEmail: ({ id, hash, expires, signature }) => 
+                `auth/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`, 
 }
 export const ROUTESCONSTANTS = {
     LOGIN: "/login",
@@ -19,5 +22,6 @@ export const ROUTESCONSTANTS = {
     NEW_PASSWORD: "/new-password",
     UPDATE_KYC: "/update-kyc",
     PROFILE: "/profile",
-    RESET_PASSWORD: "reset-password",
+    RESET_PASSWORD: "/reset-password",
+    VERIFY_EMAIL: "/verify-email",
 }

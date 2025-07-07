@@ -7,7 +7,6 @@ import { signUpSchema } from "../validationSchema/validationSchema";
 import LocalError from "../components/Error/validationError";
 
 function Registration() {
-  const [showPass, setShowPass] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');

@@ -93,6 +93,35 @@ export const resetPassword = async (formData) => {
   }
 }
 
+export const sendVerificationEmail = async () => {
+  try{
+     const res =  await authInterceptor.post(APICONSTANTS.sendVerificationEmail,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+export const verifyEmail = async (formData) => {
+  
+  try{
+     const res =  await commonInterceptor.get(APICONSTANTS.verifyEmail(formData),{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     console.log("res " + JSON.stringify(res.data));
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+
 
 
 

@@ -149,7 +149,7 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
         return null;
       }
 
-      toast.success(data?.message || "Application fetched successfully!");
+    //  toast.success(data?.message || "Application fetched successfully!");
       dispatch(setIsLoading(false));
       return data?.data || []; // return the application list
 
@@ -171,19 +171,21 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
         toast.error(error);
         dispatch(setIsLoading(false));
         return;
+      //  return { success: false, error };
       }
 
       toast.success(data?.message);
       dispatch(setIsLoading(false));
     //  navigate("/listing");
-
+    //  return { success: true, data };
     } catch (err) {
       dispatch(setIsLoading(false));
       toast.error("Something went wrong while creating the application.");
+    //  return { success: false, error: "Unexpected error" };
     }
   };
 
-    export const forgotPasswordAction = (formData, navigate) => async (dispatch) => {
+  export const forgotPasswordAction = (formData, navigate) => async (dispatch) => {
     try {
       dispatch(setIsLoading(true));
 
@@ -198,7 +200,6 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
 
       toast.success(data?.message);
       dispatch(setIsLoading(false));
-    //  navigate("/listing");
 
     } catch (err) {
       dispatch(setIsLoading(false));
@@ -224,3 +225,47 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
       toast.error("Something went wrong while creating the application.");
     }
   };
+
+  export const sendVerificationEmailAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.sendVerificationEmail(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return;
+      }
+
+      toast.success(data?.message);
+      dispatch(setIsLoading(false));
+    } catch (err) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while creating the application.");
+    }
+  };
+
+  export const verifyEmailAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.verifyEmail(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return;
+      }
+
+      toast.success(data?.message);
+      navigate("/profile");
+      dispatch(setIsLoading(false));
+    } catch (err) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while creating the application.");
+    }
+  };
+  

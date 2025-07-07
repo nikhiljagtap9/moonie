@@ -113,9 +113,15 @@ const CreateApp = () => {
 
                   <div className="singl_input">
                     <div className="labl_input">Description</div>
-                    <input type="text" name="description"
-                      value={values.description}
-                      onChange={handleChange} placeholder="Enter Website URL" className="input_text" />
+                     <textarea
+                          id="Description"
+                          name="Description"
+                          value={values?.Description}
+                          placeholder="Enter Description"
+                          onChange={handleChange}
+                          rows="4"
+                          className="form-control"
+                      />
                     <LocalError touched={touched.description} error={errors.description} />
                   </div>
 

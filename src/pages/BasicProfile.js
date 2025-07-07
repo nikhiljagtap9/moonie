@@ -16,10 +16,12 @@ const BasicProfile = () => {
         try {
           console.log("Form values inside handleSubmitForm:", values); // Debugging the form values
           // Dispatch the action to handle the signup API call
-          await dispatch(updateUserProfileAction(values, navigate));
-    
+          const response = await dispatch(updateUserProfileAction(values, navigate));
           // Reset the form fields after successful submission
-          resetForm();
+        //  resetForm(); 
+        //    if (response?.success) {
+        //     resetForm(); // Reset only on success
+        //     }
         } catch (error) {
           console.error("Error during form submission:", error);
           alert("There was an error submitting the form. Please try again.");
