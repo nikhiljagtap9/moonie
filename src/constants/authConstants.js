@@ -13,6 +13,8 @@ export const APICONSTANTS = {
     sendVerificationEmail: 'auth/email/verification-notification',
     verifyEmail: ({ id, hash, expires, signature }) => 
                 `auth/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`, 
+    resend2FAEmailCode: 'auth/2fa/email/request-code',
+    verify2FACode: ({method}) => `auth/2fa/${method}/verify`
 }
 export const ROUTESCONSTANTS = {
     LOGIN: "/login",

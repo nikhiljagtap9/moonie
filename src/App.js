@@ -24,6 +24,7 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import VerifyEmail from './pages/VerifyEmail';
 import PrivateRoute from './components/PrivateRoute';
+import TwoFactorVerification from './pages/TwoFactorVerification';
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
         <Route exact path="/logout" element={<Logout/>} />
         <Route exact path="/reset-password" element={<ResetPassword/>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/2fa-verification" element={<AuthLayout><TwoFactorVerification /></AuthLayout>} />
 
         {/* Main Routes */}
          {/* Protected routes go inside PrivateRoute */}

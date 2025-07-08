@@ -138,3 +138,8 @@ export const resetPasswordSchema = Yup.object().shape({
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm Password is required"),
 });
+
+export const otpSchema = Yup.object().shape({
+  otp:  Yup.string().min(6, "Enter a Valid Otp")
+    .required("Enter a 6 digit OTP")
+});

@@ -114,12 +114,40 @@ export const verifyEmail = async (formData) => {
           "Content-Type": "application/json",
         },
      });
-     console.log("res " + JSON.stringify(res.data));
      return { error: null, data: res.data };
   } catch(error){
      return handleApiError(error);
   }
 }
+
+export const resend2FAEmailCode = async () => {
+  try {
+    const res = await authInterceptor.post(APICONSTANTS.resend2FAEmailCode, {}, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return { error: null, data: res.data };
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
+
+export const verify2FACode = async (formData) => {
+  try{
+     const res =  await authInterceptor.post(APICONSTANTS.verify2FACode(formData),formData,{
+        headers: {
+          "Content-Type": "application/json",
+        },
+     });
+     return { error: null, data: res.data };
+  } catch(error){
+     return handleApiError(error);
+  }
+}
+
+
 
 
 
