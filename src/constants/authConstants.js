@@ -14,7 +14,11 @@ export const APICONSTANTS = {
     verifyEmail: ({ id, hash, expires, signature }) => 
                 `auth/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`, 
     resend2FAEmailCode: 'auth/2fa/email/request-code',
-    verify2FACode: ({method}) => `auth/2fa/${method}/verify`
+    verify2FACode: ({method}) => `auth/2fa/${method}/verify`,
+    getAll2FAMethods: '/2fa',
+    start2FASetup: ({method}) => `2fa/start/${method}/setup`,
+    complete2FASetup: ({method}) => `2fa/complete/${method}/setup`,
+    disable2FAMethod: ({method}) => `2fa/${method}/disable`
 }
 export const ROUTESCONSTANTS = {
     LOGIN: "/login",

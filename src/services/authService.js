@@ -147,6 +147,59 @@ export const verify2FACode = async (formData) => {
   }
 }
 
+export const getAll2FAMethods = async () => {
+  try{
+    const res = await authInterceptor.get(APICONSTANTS.getAll2FAMethods,{
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return {error: null, data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+export const start2FASetup = async (formData) => {
+  try{
+    const res = await authInterceptor.post(APICONSTANTS.start2FASetup(formData),formData,{
+      headers:{
+        "Content-Type": "application/json",
+      },
+    });
+    return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+export const complete2FASetup = async (formData) => {
+  try{
+    const res = await authInterceptor.post(APICONSTANTS.complete2FASetup(formData),formData,{
+      headers:{
+        "Content-Type": "application/json",
+      },
+    });
+    return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+export const disable2FAMethod = async(formData) => {
+  try{
+   const res = await authInterceptor.post(APICONSTANTS.disable2FAMethod(formData),formData,{
+     headers:{
+      "Content-Type" : "application/json",
+     }
+   });
+   return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+
 
 
 

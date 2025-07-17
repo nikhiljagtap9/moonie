@@ -56,7 +56,10 @@ function TwoFactorVerification(){
   
                   <div className="tab-content nav p-b30 tab">
                     <div className="tab-pane active">
+                      {/*You can force Formik to reinitialize when 
+                      defaultMethod changes by using the enableReinitialize prop on the <Formik> component.*/}
                     <Formik
+                        enableReinitialize={true} 
                         initialValues={{
                             method: defaultMethod,
                             otp: "",

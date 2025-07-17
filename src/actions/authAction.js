@@ -365,6 +365,98 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
   };
 
   
+  export const getAll2FAMethodsAction = () => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
 
+      const response = await Api.getAll2FAMethods();
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        dispatch(setIsLoading(false));
+        return null;
+      }
+
+      dispatch(setIsLoading(false));
+      return data?.data || []; // return the  list
+
+    } catch (err) {
+      dispatch(setIsLoading(false));
+      toast.error("Something went wrong while fetching list.");
+      return null;
+    }
+  };
+
+  export const start2FASetupAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.start2FASetup(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      return data?.data || [];
+
+    } catch (err) {
+      toast.error("Something went wrong while 2FA Setup ");
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+  export const complete2FASetupAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.complete2FASetup(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      toast.success(data?.message || "2FA has been enabled successfully!");
+      return data?.data || [];
+
+    } catch (err) {
+      toast.error("Something went wrong while Complete 2FA Setup");
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+    export const disable2FAMethodAction = (formData, navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.disable2FAMethod(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      toast.success(data?.message);
+      return data?.data || [];
+
+    } catch (err) {
+      toast.error("Something went wrong while Disable 2FA Method");
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+
+  
   
   

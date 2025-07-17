@@ -114,9 +114,9 @@ const CreateApp = () => {
                   <div className="singl_input">
                     <div className="labl_input">Description</div>
                      <textarea
-                          id="Description"
-                          name="Description"
-                          value={values?.Description}
+                          id="description"
+                          name="description"
+                          value={values.description}
                           placeholder="Enter Description"
                           onChange={handleChange}
                           rows="4"
