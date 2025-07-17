@@ -49,16 +49,11 @@
         body {
           visibility: hidden;
           opacity: 0;
-          transition: opacity 0.2s ease;
+          transition: opacity 0.5s ease-in;
         }
       </style>
 
-      <script>
-        window.addEventListener('load', function () {
-          document.body.style.visibility = 'visible';
-          document.body.style.opacity = '1';
-        });
-      </script>
+     
 
   </head>
   <body>
@@ -96,6 +91,13 @@
          layout_caption_change('true');    
          layout_rtl_change('false');
          preset_change('preset-1');
+      </script>
+
+      <script>
+        window.addEventListener('load', function () {
+          document.body.style.visibility = 'visible';
+          document.body.style.opacity = '1';
+        });
       </script>
       
   </body>

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import { ROUTESCONSTANTS } from "../../constants/authConstants";
 
 
 
 
 const Header = () => {
+  const[userName, setUserName] = useState();
+  const[email, setEmail] = useState();
+  useEffect(() => {
+    const profileString = sessionStorage.getItem('profile') || localStorage.getItem('profile');
+    if(profileString){
+          try{
+          const profile = JSON.parse(profileString);
+          const fullName = profile?.user?.first_name +' '+profile?.user?.last_name || '';
+          setUserName(fullName);
+          const mail = profile?.user?.email || '';
+          setEmail(mail);
+          }catch(err){
+          console.error("Invalid session profile data", err);
+          }
+
+      }
+  })
   return (
     <>
       <div className="loader-bg">
@@ -207,25 +225,37 @@ const Header = () => {
                           <img src="assets/images/user/avatar-2.jpg" alt="user" className="wid-50 rounded-circle" />
                         </div>
                         <div className="flex-grow-1 mx-3">
-                          <h5 className="mb-0">User</h5>
+                          <h5 className="mb-0">{userName}</h5>
                           <a className="link-primary" href="#">
-                            info@company.io
+                            {email}
                           </a>
                         </div>
                       </div>
                     </li>
                     <li className="list-group-item">
-                      <a href="#" className="dropdown-item d-flex align-items-center">
-                        <i className="ph-duotone ph-key me-2"></i>
+                      <a href={ROUTESCONSTANTS?.UPDATE_KYC} class="dropdown-item">
+                        <span class="d-flex align-items-center">
+                          <i class="ph-duotone ph-newspaper-clipping"></i>
+                          <span>Update KYC</span>
+                        </span>
+                      </a>
+                      {/* <a href="#" class="dropdown-item">
+                        <span class="d-flex align-items-center">
+                        <i class="ph-duotone ph-key"></i>
                         <span>Change password</span>
-                      </a>
-                      <a href="#" className="dropdown-item d-flex align-items-center">
-                        <i className="ph-duotone ph-user-circle me-2"></i>
+                        </span>
+                      </a> */}
+                       <a href={ROUTESCONSTANTS?.PROFILE} class="dropdown-item">
+                        <span class="d-flex align-items-center">
+                        <i class="ph-duotone ph-user-circle"></i>
                         <span>Edit profile</span>
+                        </span>
                       </a>
-                      <a href="#" className="dropdown-item d-flex align-items-center">
-                        <i className="ph-duotone ph-power me-2"></i>
+                      <a href={ROUTESCONSTANTS?.LOGOUT } class="dropdown-item">
+                        <span class="d-flex align-items-center">
+                        <i class="ph-duotone ph-power"></i>
                         <span>Logout</span>
+                        </span>
                       </a>
                     </li>
                   </ul>

@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
+import { Formik } from "formik";
+import { signUpAction } from "../actions/authAction";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signUpSchema } from "../validationSchema/validationSchema";
+import LocalError from "../components/Error/validationError";
 
-export default function Register() {
+function Registration() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
+
+  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+    try {
+      // Dispatch the action to handle the signup API call
+      await dispatch(signUpAction(values, navigate));
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      alert("There was an error submitting the form. Please try again.");
+    } finally {
+      setSubmitting(false); // Stop loading state
+    }
+  };
 
   return (
     <div className="page-wraper">
-      {/* <div id="loading-area"></div> */}
-
       <div className="browse-job login-style3">
         <div
           className="bg-img-fix"
@@ -33,132 +51,112 @@ export default function Register() {
                   {/* LOGIN TAB */}
                   {activeTab === 'login' && (
                     <div className="tab-pane active">
-                      <form className="dez-form p-b30">
-                        <h3 className="form-title m-t0">Create your account</h3>
-                        <div className="dez-separator-outer m-b5">
-                          <div className="dez-separator bg-primary style-liner"></div>
-                        </div>
+                      <Formik
+                        initialValues={{
+                          first_name: "",
+                          last_name: "",
+                          email: "",
+                          password: "",
+                          password_confirmation: ""
+                        }}
+                        validationSchema={signUpSchema}
+                        onSubmit={async (values, { setSubmitting, resetForm }) => {
+                          console.log("Form values from Formik onSubmit:", values); // Log the values here
+                          setSubmitting(true);
+                          await handleSubmitForm(values, { setSubmitting, resetForm });
+                          setSubmitting(false);
+                        }}
+                      >
+                        {({
+                          values,
+                          errors,
+                          touched,
+                          handleChange,
+                          handleSubmit, // Ensure this is provided
+                        }) => (
+                          <form className="dez-form p-b30" onSubmit={handleSubmit}> {/* Ensure this is here */}
+                            <h3 className="form-title m-t0">Create your account</h3>
+                            <div className="dez-separator-outer m-b5">
+                              <div className="dez-separator bg-primary style-liner"></div>
+                            </div>
 
-                        <div className="form-group half_inp1">
-                          <input required className="form-control" placeholder="First Name" type="text" />
-                        </div>
-                        <div className="form-group half_inp2">
-                          <input required className="form-control" placeholder="Last Name" type="text" />
-                        </div>
+                            <div className="form-group half_inp1">
+                              <input
+                                className="form-control"
+                                placeholder="First Name"
+                                type="text"
+                                id="first_name"
+                                name="first_name"
+                                value={values.first_name}
+                                onChange={handleChange}
+                              />
+                               <LocalError touched={touched.first_name} error={errors.first_name} />
+                            </div>
+                            <div className="form-group half_inp2">
+                              <input
+                                className="form-control"
+                                placeholder="Last Name"
+                                id="last_name"
+                                type="text"
+                                name="last_name"
+                                value={values.last_name}
+                                onChange={handleChange}
+                              />
+                               <LocalError touched={touched.last_name} error={errors.last_name} />
+                            </div>
 
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Email ID" type="email" />
-                        </div>
+                            <div className="form-group">
+                              <input
+                                className="form-control"
+                                placeholder="Email ID"
+                                id="email"
+                                name="email"
+                                value={values.email}
+                                onChange={handleChange}
+                              />
+                               <LocalError touched={touched.email} error={errors.email} />
+                            </div>
 
-                        <div className="form-group half_inp1">
-                          <input required className="form-control" placeholder="Enter Password" type="password" />
-                        </div>
-                        <div className="form-group half_inp2">
-                          <input required className="form-control" placeholder="Re-enter Password" type="password" />
-                        </div>
-                      </form>
+                            <div className="form-group half_inp1">
+                              <input
+                                className="form-control"
+                                placeholder="Enter Password"
+                                id="password"
+                                name="password"
+                                type="password"
+                                value={values.password}
+                                onChange={handleChange}
+                              />
+                               <LocalError touched={touched.password} error={errors.password} />
+                            </div>
+                            <div className="form-group half_inp2">
+                              <input
+                                className="form-control"
+                                placeholder="Re-enter Password"
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                type="password"
+                                value={values.password_confirmation}
+                                onChange={handleChange}
+                              />
+                               <LocalError touched={touched.password_confirmation} error={errors.password_confirmation} />
+                            </div>
 
-                      <div className="text-center bottom">
-                        <a
-                          href="welcome"
-                          className="site-button button-md btn-block text-white cret_ac_text"
-                        >
-                          Create an account
-                        </a>
-                      </div>
+                            <div className="text-center bottom">
+                              <button
+                                type="submit"
+                                className="site-button button-md btn-block text-white cret_ac_text"
+                              >
+                                Create an account
+                              </button>
+                            </div>
+                          </form>
+                        )}
+                      </Formik>
                     </div>
                   )}
 
-                  {/* FORGOT PASSWORD TAB */}
-                  {/* {activeTab === 'forgot' && (
-                    <div className="tab-pane fade">
-                      <form className="dez-form">
-                        <h3 className="form-title m-t0">Forget Password ?</h3>
-                        <div className="dez-separator-outer m-b5">
-                          <div className="dez-separator bg-primary style-liner"></div>
-                        </div>
-                        <p>Enter your e-mail address below to reset your password. </p>
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Email Address" type="email" />
-                        </div>
-                        <div className="form-group clearfix text-left">
-                          <button
-                            type="button"
-                            className="site-button outline gray"
-                            onClick={() => setActiveTab('login')}
-                          >
-                            Back
-                          </button>
-                          <button className="site-button float-end">Submit</button>
-                        </div>
-                      </form>
-                    </div>
-                  )} */}
-
-                  {/* REGISTRATION TAB */}
-                  {/* {activeTab === 'register' && (
-                    <div className="tab-pane fade">
-                      <form className="dez-form">
-                        <h3 className="form-title m-t0">Sign Up</h3>
-                        <div className="dez-separator-outer m-b5">
-                          <div className="dez-separator bg-primary style-liner"></div>
-                        </div>
-                        <p>Enter your personal details below: </p>
-
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Full Name" type="text" />
-                        </div>
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="User Name" type="text" />
-                        </div>
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Email Address" type="email" />
-                        </div>
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Password" type="password" />
-                        </div>
-                        <div className="form-group">
-                          <input required className="form-control" placeholder="Re-type Your Password" type="password" />
-                        </div>
-
-                        <div className="m-b30">
-                          <span className="form-check float-start m-r5">
-                            <input type="checkbox" className="form-check-input" id="check2" />
-                            <label className="form-check-label" htmlFor="check2">
-                              I agree to the
-                            </label>
-                          </span>
-                          <label>
-                            <a href="#">Terms of Service </a>& <a href="#">Privacy Policy</a>
-                          </label>
-                        </div>
-
-                        <div className="form-group clearfix text-left">
-                          <button
-                            type="button"
-                            className="site-button outline gray"
-                            onClick={() => setActiveTab('login')}
-                          >
-                            Back
-                          </button>
-                          <button className="site-button float-end">Submit</button>
-                        </div>
-                      </form>
-                    </div>
-                  )} */}
-
-                  {/* Tab Switcher (Optional UI Buttons) */}
-                  {/* <div className="text-center mt-3">
-                    <button onClick={() => setActiveTab('login')} className="btn btn-link">
-                      Login
-                    </button>
-                    <button onClick={() => setActiveTab('forgot')} className="btn btn-link">
-                      Forgot Password
-                    </button>
-                    <button onClick={() => setActiveTab('register')} className="btn btn-link">
-                      Sign Up
-                    </button>
-                  </div> */}
+                  {/* Other tabs (forgot password, registration, etc.) */}
                 </div>
               </div>
             </div>
@@ -168,3 +166,5 @@ export default function Register() {
     </div>
   );
 }
+
+export default Registration;

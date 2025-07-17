@@ -46,11 +46,8 @@ export default function Home() {
                       <i className="fa fa-user"></i> Sign Up
                     </a>
                     <a
-                      href="#"
+                      href="/login"
                       title="Login"
-                      rel="bookmark"
-                      data-bs-toggle="modal"
-                      data-bs-target="#car-details"
                       className="site-button"
                     >
                       <i className="fa fa-lock"></i> Login

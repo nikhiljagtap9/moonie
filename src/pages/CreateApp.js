@@ -1,7 +1,43 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Formik } from "formik";
+import { Link, useNavigate } from 'react-router-dom';
+import { getCategories } from '../services/commonService'
+import { createApplicationAction } from '../actions/authAction'
+import { useDispatch } from "react-redux";
+import { applicationSchema } from "../validationSchema/validationSchema";
+import LocalError from "../components/Error/validationError";
 
 const CreateApp = () => {
+  const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    const { data } = await getCategories();
+    setCategories(data?.data || []);
+  };
+
+  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+    try {
+      // Dispatch the action to handle the signup API call
+      await dispatch(createApplicationAction(values, navigate));
+
+      // Reset the form fields after successful submission
+      resetForm();
+      navigate("/listing"); // Replace "/dashboard" with the desired route
+    } catch (error) {
+      console.error("Error during form submission:", error);
+      alert("There was an error submitting the form. Please try again.");
+    } finally {
+      setSubmitting(false); // Stop loading state
+    }
+  };
+
+
   return (
     <>
       <style>{`
@@ -36,49 +72,101 @@ const CreateApp = () => {
 
         <div className="hand_wrp">
           <div className="form_wrp">
-            <div className="singl_input">
-              <div className="labl_input">App Name</div>
-              <input type="text" placeholder="Enter App Name" className="input_text" />
-            </div>
-
-            <div className="singl_input">
-              <div className="labl_input">Website URL</div>
-              <input type="text" placeholder="Enter Website URL" className="input_text" />
-            </div>
-
-            <div className="singl_input">
-              <div className="labl_input">Select Category</div>
-              <select className="input_text">
-                <option>Category 1</option>
-                <option>Category 2</option>
-                <option>Category 3</option>
-                <option>Category 4</option>
-              </select>
-            </div>
-
-            <div className="clear"></div>
-          </div>
-
-          <Link to="/listing" className="right_btn">
-            <span>Create App</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-arrow-right"
+            <Formik
+              initialValues={{
+                name: "",
+                category_id: "",
+                description: "",
+                website: ""
+              }}
+              validationSchema={applicationSchema}
+              onSubmit={handleSubmitForm}
             >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 16l4 -4l-4 -4" />
-              <path d="M8 12h8" />
-              <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
-            </svg>
-          </Link>
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleSubmit, // Ensure this is provided
+              }) => (
+                <form className="dez-form p-b30" onSubmit={handleSubmit}> {/* Ensure this is here */}
+
+                  <div className="dez-separator-outer m-b5">
+                    <div className="dez-separator bg-primary style-liner"></div>
+                  </div>
+
+                  <div className="singl_input">
+                    <div className="labl_input">App Name</div>
+                    <input type="text" name="name"
+                      value={values.name}
+                      onChange={handleChange} placeholder="Enter App Name" className="input_text" />
+                    <LocalError touched={touched.name} error={errors.name} />
+                  </div>
+
+                  <div className="singl_input">
+                    <div className="labl_input">Website URL</div>
+                    <input type="text" name="website"
+                      value={values.website}
+                      onChange={handleChange} placeholder="Enter Website URL" className="input_text" />
+                    <LocalError touched={touched.website} error={errors.website} />
+                  </div>
+
+                  <div className="singl_input">
+                    <div className="labl_input">Description</div>
+                     <textarea
+                          id="description"
+                          name="description"
+                          value={values.description}
+                          placeholder="Enter Description"
+                          onChange={handleChange}
+                          rows="4"
+                          className="form-control"
+                      />
+                    <LocalError touched={touched.description} error={errors.description} />
+                  </div>
+
+                  <div className="singl_input">
+                    <div className="labl_input">Select Category</div>
+                    <select className="input_text" name="category_id" onChange={handleChange}>
+                      <option value="">-- Select Category --</option>
+                      {categories.map((cat, index) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </select>
+                    <LocalError touched={touched.category_id} error={errors.category_id} />
+                  </div>
+
+                  <div className="text-center bottom">
+                    <button
+                      type="submit"
+                      className="right_btn"
+                    >
+                      <span>Create App</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-arrow-right"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 16l4 -4l-4 -4" />
+                        <path d="M8 12h8" />
+                        <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
+                      </svg>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </Formik>
+          </div>
         </div>
 
         <div className="clear"></div>

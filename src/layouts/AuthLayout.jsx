@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import AuthHeader from '../components/Header/AuthHeader';
 import AuthFooter from '../components/Footer/AuthFooter';
+import { useLocation } from 'react-router-dom';
 
 const AuthLayout = ({ children }) => {
+  const location = useLocation();
     useEffect(() => {
       const links = [
         'assets/home/css/plugins.css',
@@ -57,11 +59,14 @@ const AuthLayout = ({ children }) => {
         scriptTags.forEach((script) => document.body.removeChild(script));
       };
     }, []);
+
+    const isHomePage = location.pathname === '/';
+
   return(
   <>
     <AuthHeader />
     <main>{children}</main>
-    <AuthFooter />
+    {isHomePage && <AuthFooter />}
   </>
   )
 };
