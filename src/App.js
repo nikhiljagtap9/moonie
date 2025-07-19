@@ -7,6 +7,7 @@ import Home from './pages/Home';
 
 import Welcome from './pages/Welcome';
 import CreateApp from './pages/CreateApp';
+import EditApp from './pages/EditApp';
 import Listing from './pages/Listing';
 import Dashboard from './pages/Dashboard';
 import PaymentLink from './pages/PaymentLink';
@@ -47,6 +48,7 @@ function App() {
           <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
           <Route path="/welcome" element={<MainLayout><Welcome /></MainLayout>} />
           <Route path="/create-app" element={<MainLayout><CreateApp /></MainLayout>} />
+          <Route path="/edit-app/:ref" element={<MainLayout><EditApp /></MainLayout>} />
           <Route path="/listing" element={<MainLayout><Listing /></MainLayout>} />
 
           <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />

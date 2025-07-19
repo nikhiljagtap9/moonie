@@ -456,6 +456,77 @@ export const setInitialAuthState = (navigate) => async (dispatch) => {
     }
   };
 
+  export const showApplicationDetailsAction = (formData) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.showApplicationDetails(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      return data?.data || [];
+
+    } catch (err) {
+      toast.error("Something went wrong while Show Application Details");
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+  export const updateApplicationAction = (formData,navigate) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.updateApplication(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      toast.success(data?.message);
+      dispatch(setIsLoading(false));
+      navigate("/listing");
+     
+    } catch (err) {
+      toast.error("Something went wrong while Update Application Details" + err);
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+  export const deleteApplicationAction = (formData) => async (dispatch) => {
+    try {
+      dispatch(setIsLoading(true));
+
+      const response = await Api.deleteApplication(formData);
+      const { data, error } = response;
+
+      if (error) {
+        toast.error(error);
+        return null;
+      }
+
+      toast.success(data?.message);
+      return true;
+     
+    } catch (err) {
+      toast.error("Something went wrong while Delete Application Details" + err);
+      return null;
+    } finally {
+      dispatch(setIsLoading(false));
+    }
+  };
+
+  
+
 
   
   

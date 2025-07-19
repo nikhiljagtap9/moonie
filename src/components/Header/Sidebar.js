@@ -27,7 +27,7 @@ const Sidebar = () => {
          <nav className="pc-sidebar">
             <div className="navbar-wrapper">
                <div className="m-header">
-                  <a href="/" className="b-brand text-primary">
+                  <a href="/welcome" className="b-brand text-primary">
                      <img src="/assets/images/Logo.png" alt="logo image" className="main_logo" />
                   </a>
                </div>

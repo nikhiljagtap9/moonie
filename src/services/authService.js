@@ -199,6 +199,47 @@ export const disable2FAMethod = async(formData) => {
   }
 }
 
+export const showApplicationDetails = async(formData) => {
+  try{
+    const res = await authInterceptor.get(APICONSTANTS.showApplicationDetails(formData),formData,{
+      headers:{
+        "Content-Type":"application/json"
+      }
+    });
+    return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+export const updateApplication = async(formData) => {
+  try{
+    const res = await authInterceptor.patch(APICONSTANTS.updateApplication(formData),formData,{
+      headers:{
+        "Content-Type":"application/json"
+      }
+    });
+    return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+export const deleteApplication = async(formData) => {
+  try{
+    const res = await authInterceptor.delete(APICONSTANTS.deleteApplication(formData),formData,{
+      headers:{
+        "Content-Type":"application/json"
+      }
+    });
+    return {error:null,data:res.data};
+  }catch(error){
+    return handleApiError(error);
+  }
+}
+
+
+
 
 
 

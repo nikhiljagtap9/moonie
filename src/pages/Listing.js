@@ -1,41 +1,56 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
-import { getApplicationsAction } from "../actions/authAction";
-
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { getApplicationsAction, deleteApplicationAction } from "../actions/authAction";
 
 const Listing = () => {
     const dispatch = useDispatch();
-    const[userName,setUserName] = useState('');
+    const [userName, setUserName] = useState('');
     const [applicationList, setApplicationList] = useState([]);
-    
+    const navigate = useNavigate();
+
+
+    const handleCardClick = () => {
+    navigate("/dashboard");
+    };
+
     useEffect(() => {
         const profileString = sessionStorage.getItem('profile') || localStorage.getItem('profile');
-        
-        if(profileString){
-            try{
-            const profile = JSON.parse(profileString);
-            const firstName = profile?.user?.first_name || '';
+
+        if (profileString) {
+            try {
+                const profile = JSON.parse(profileString);
+                const firstName = profile?.user?.first_name || '';
                 setUserName(firstName);
-            }catch(err){
-            console.error("Invalid session profile data", err);
+            } catch (err) {
+                console.error("Invalid session profile data", err);
             }
 
         }
 
-       
+
         // call get application API
         fetchApplicationList();
-        
-    },[]);
+
+    }, []);
 
     const fetchApplicationList = async () => {
-        let apps  = await dispatch(getApplicationsAction());
+        let apps = await dispatch(getApplicationsAction());
         if (apps) {
             setApplicationList(apps);
         }
     }
 
-  
+    const handleDelete = async (application_ref) => {
+        if (window.confirm("Are you sure you want to delete this application?" )) {
+            const result = await dispatch(deleteApplicationAction({ application_ref }, navigate));
+            if (result) {
+                fetchApplicationList(); // Refresh list only on success
+            }
+        }
+    };
+
+
     return (
         <>
             <style>{`
@@ -63,23 +78,58 @@ const Listing = () => {
 
                     <div className="listing_wrp_1">
                         {applicationList.map((app) => (
-                        <a key={app.id} href="dashboard" className="listing_wrp_singl">
-                            <img src={app.logo || "https://persausive.com/public/frontend/images/logo_fev.png"} className="lisgn_icon" alt="App" />
-                            <div className="listn_text">{app.name}</div>
-                            <div className="clear"></div>
-                        </a>
-                        ))}
-                        {/* <a href="dashboard" className="listing_wrp_singl">
-                            <img src="https://persausive.com/public/frontend/images/logo_fev.png" className="lisgn_icon" />
-                            <div className="listn_text">Persausive</div>
-                            <div className="clear"></div>
-                        </a>
+                            // <a key={app.id} href="dashboard" className="listing_wrp_singl">
+                            //     <img src={app.logo || "https://persausive.com/public/frontend/images/logo_fev.png"} className="lisgn_icon" alt="App" />
+                            //     <div className="listn_text">{app.name}</div>
+                            //     <div className="clear"></div>
+                            // </a>
+                            // <div key={app.id} className="listing_wrp_singl app_item_card">
+                            //     <img
+                            //         src={app.logo || "https://persausive.com/public/frontend/images/logo_fev.png"}
+                            //         className="lisgn_icon"
+                            //         alt="App"
+                            //     />
+                            //     <div className="listn_text">{app.name}</div>
 
-                        <a href="dashboard" className="listing_wrp_singl">
-                            <img src="https://persausive.com/public/frontend/images/logo_fev.png" className="lisgn_icon" />
-                            <div className="listn_text">Persausive</div>
-                            <div className="clear"></div>
-                        </a> */}
+                            //     <div className="app_actions">
+                            //         <a href={`/edit-app/${app.ref}`} className="edit_btn">
+                            //             ✏️
+                            //         </a>
+                            //         <button
+                            //             className="delete_btn"
+                            //             onClick={() => handleDelete(app.ref)}
+                            //         >
+                            //             🗑️
+                            //         </button>
+                            //     </div>
+
+                            //     <div className="clear"></div>
+                            // </div>
+
+                            <div
+                                key={app.id}
+                                className="listing_wrp_singl app_item_card"
+                                onClick={handleCardClick}
+                                style={{ cursor: 'pointer', position: 'relative' }}
+                                >
+                                <img
+                                    src={app.logo || "https://persausive.com/public/frontend/images/logo_fev.png"}
+                                    className="lisgn_icon"
+                                    alt="App"
+                                />
+
+                                <div className="listn_text">{app.name}</div>
+
+                                <div className="app_actions" onClick={(e) => e.stopPropagation()}>
+                                    <a href={`/edit-app/${app.ref}`} className="edit_btn">✏️</a>
+                                    <button className="delete_btn" onClick={() => handleDelete(app.ref)}>🗑️</button>
+                                </div>
+
+                                <div className="clear"></div>
+                                </div>
+
+
+                        ))}
 
                         <a href="create-app" className="listing_wrp_singl add_new_list">
                             <div className="lisgn_icon lisgn_icon_add">

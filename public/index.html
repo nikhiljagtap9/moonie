@@ -51,6 +51,18 @@
           opacity: 0;
           transition: opacity 0.5s ease-in;
         }
+        .logo-header img{
+          display:none;
+        }
+
+        body.visible {
+          visibility: visible;
+          opacity: 1;
+        }
+
+        body.visible .logo-header img {
+          display: block;
+        }
       </style>
 
      
@@ -95,8 +107,10 @@
 
       <script>
         window.addEventListener('load', function () {
-          document.body.style.visibility = 'visible';
-          document.body.style.opacity = '1';
+          // Delay the reveal by 300ms (adjust as needed)
+          setTimeout(function () {
+            document.body.classList.add('visible');
+          }, 300);
         });
       </script>
       

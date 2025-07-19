@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
-import { Link, useNavigate } from 'react-router-dom';
-import { getCategories } from '../services/commonService'
-import { createApplicationAction, getApplicationsAction } from '../actions/authAction'
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import {
+  getCategories,
+} from "../services/commonService"; // Assume getApplicationById returns app details
+import {
+   showApplicationDetailsAction,
+   updateApplicationAction
+} from "../actions/authAction";
 import { applicationSchema } from "../validationSchema/validationSchema";
 import LocalError from "../components/Error/validationError";
-import { hasData } from 'jquery';
 
-const CreateApp = () => {
+const EditApp = () => {
+
   const [categories, setCategories] = useState([]);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [hasApps, setHasApps] = useState(false); // New state to check if apps exist
+  const [initialValues, setInitialValues] = useState(null);
+  const dispatch = useDispatch();
+  const { ref } = useParams(); // app ref from URL
 
   useEffect(() => {
     fetchCategories();
-    checkIfAppsExist(); // check if apps already exist
+    fetchAppDetails();
   }, []);
 
   const fetchCategories = async () => {
@@ -24,52 +30,54 @@ const CreateApp = () => {
     setCategories(data?.data || []);
   };
 
-  // for skip button
-  const checkIfAppsExist = async () => {
-    const apps = await dispatch(getApplicationsAction());
-    if (apps && apps.length > 0) {
-      setHasApps(true);
-    }
+  const fetchAppDetails = async () => {
+    const app  = await dispatch(showApplicationDetailsAction({ref})); // Fetch single app
+    
+    setInitialValues({
+      name: app?.name || "",
+      website: app?.website || "",
+      description: app?.description || "",
+      category_id: app?.category.id || "",
+    });
   };
 
-  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmitForm = async (values, { setSubmitting }) => {
+    const finalValues = {
+      ref, // ensure ref is passed with values
+      ...values,
+    };
     try {
-      // Dispatch the action to handle the signup API call
-      await dispatch(createApplicationAction(values, navigate));
-
-      // Reset the form fields after successful submission
-      resetForm();
-      navigate("/listing"); // Replace "/dashboard" with the desired route
+      await dispatch(updateApplicationAction(finalValues,navigate));
     } catch (error) {
-      console.error("Error during form submission:", error);
-      alert("There was an error submitting the form. Please try again.");
+      console.error("Update error:", error);
+      alert("Something went wrong during update.");
     } finally {
-      setSubmitting(false); // Stop loading state
+      setSubmitting(false);
     }
   };
 
+  if (!initialValues) return <p>Loading...</p>;
 
-  return (
-    <>
-      <style>{`
+    return (
+        <>
+         <style>{`
         .pc-sidebar, .pc-header, .pc-container, .pc-footer {
           display: none;
         }
       `}</style>
-
-      <div className="mone_wrp_text">
+         
+         <div className="mone_wrp_text">
         <div className="step_svg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
+            className="icon icon-tabler icon-tabler-checklist"
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
             strokeWidth="2"
+            stroke="currentColor"
+            fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="icon icon-tabler icons-tabler-outline icon-tabler-checklist"
           >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
             <path d="M14 19l2 2l4 -4" />
             <path d="M9 8h4" />
@@ -77,20 +85,14 @@ const CreateApp = () => {
           </svg>
         </div>
 
-        <div className="clear"></div>
-
-        <div className="app_titl">Create Your First App</div>
+        <div className="app_titl">Edit Your App</div>
 
         <div className="hand_wrp">
           <div className="form_wrp">
             <Formik
-              initialValues={{
-                name: "",
-                category_id: "",
-                description: "",
-                website: ""
-              }}
+              initialValues={initialValues}
               validationSchema={applicationSchema}
+              enableReinitialize={true}
               onSubmit={handleSubmitForm}
             >
               {({
@@ -98,49 +100,64 @@ const CreateApp = () => {
                 errors,
                 touched,
                 handleChange,
-                handleSubmit, // Ensure this is provided
+                handleSubmit,
               }) => (
-                <form className="dez-form p-b30" onSubmit={handleSubmit}> {/* Ensure this is here */}
-
+                <form className="dez-form p-b30" onSubmit={handleSubmit}>
+                  <input type="hidden" name="ref" value={ref} />
                   <div className="dez-separator-outer m-b5">
                     <div className="dez-separator bg-primary style-liner"></div>
                   </div>
 
                   <div className="singl_input">
                     <div className="labl_input">App Name</div>
-                    <input type="text" name="name"
+                    <input
+                      type="text"
+                      name="name"
                       value={values.name}
-                      onChange={handleChange} placeholder="Enter App Name" className="input_text" />
+                      onChange={handleChange}
+                      placeholder="Enter App Name"
+                      className="input_text"
+                    />
                     <LocalError touched={touched.name} error={errors.name} />
                   </div>
 
                   <div className="singl_input">
                     <div className="labl_input">Website URL</div>
-                    <input type="text" name="website"
+                    <input
+                      type="text"
+                      name="website"
                       value={values.website}
-                      onChange={handleChange} placeholder="Enter Website URL" className="input_text" />
+                      onChange={handleChange}
+                      placeholder="Enter Website URL"
+                      className="input_text"
+                    />
                     <LocalError touched={touched.website} error={errors.website} />
                   </div>
 
                   <div className="singl_input">
                     <div className="labl_input">Description</div>
-                     <textarea
-                          id="description"
-                          name="description"
-                          value={values.description}
-                          placeholder="Enter Description"
-                          onChange={handleChange}
-                          rows="4"
-                          className="form-control"
-                      />
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={values.description}
+                      placeholder="Enter Description"
+                      onChange={handleChange}
+                      rows="4"
+                      className="form-control"
+                    />
                     <LocalError touched={touched.description} error={errors.description} />
                   </div>
 
                   <div className="singl_input">
                     <div className="labl_input">Select Category</div>
-                    <select className="input_text" name="category_id" onChange={handleChange}>
+                    <select
+                      className="input_text"
+                      name="category_id"
+                      value={values.category_id}
+                      onChange={handleChange}
+                    >
                       <option value="">-- Select Category --</option>
-                      {categories.map((cat, index) => (
+                      {categories.map((cat) => (
                         <option key={cat.id} value={cat.id}>
                           {cat.name}
                         </option>
@@ -150,11 +167,8 @@ const CreateApp = () => {
                   </div>
 
                   <div className="text-center bottom">
-                    <button
-                      type="submit"
-                      className="right_btn"
-                    >
-                      <span>Create App</span>
+                    <button type="submit" className="right_btn">
+                      <span>Update App</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -165,23 +179,14 @@ const CreateApp = () => {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="icon icon-tabler icons-tabler-outline icon-tabler-square-rounded-arrow-right"
+                        className="icon icon-tabler icon-tabler-square-rounded-arrow-right"
                       >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M12 16l4 -4l-4 -4" />
                         <path d="M8 12h8" />
                         <path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9 -9 9s-9 -1.8 -9 -9s1.8 -9 9 -9z" />
                       </svg>
                     </button>
                   </div>
-
-                  {hasApps && (
-                    <div className="text-center m-b10">
-                      <Link to="/listing" className="right_btn gray_btn">
-                        <span>Skip</span>
-                      </Link>
-                    </div>
-                  )}
                 </form>
               )}
             </Formik>
@@ -190,8 +195,8 @@ const CreateApp = () => {
 
         <div className="clear"></div>
       </div>
-    </>
-  );
-};
+        </>
+    )
+}
 
-export default CreateApp;
+export default EditApp;
